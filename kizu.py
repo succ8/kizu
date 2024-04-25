@@ -8,13 +8,9 @@ from textual.widgets import Header, Footer, OptionList, Input
 from textual.widget import Widget
 
 anime = alist.gen_list()
-animeList: list[list[str, str, str, str], ...] = anime
 
 class ListUpdate(Widget):
-    test = reactive("test")
-
-class kizu(App):
-    CSS_PATH = "layout.css"
+    animeList = reactive([])
 
     @staticmethod
     def anime(id: str, name: str, eps: str, date: str) -> Table:
@@ -25,19 +21,34 @@ class kizu(App):
         table.add_row(eps,name,date)
         return table
 
+    def get_list_as_tables(self):
+        return [self.anime(*entry.values()) for entry in self.animeList]
+    
+    #def on_mount(self):
+
     def compose(self) -> ComposeResult:
-        yield Header()
-        yield Footer()
         yield Input(placeholder="Anime Name / ID")
-        yield OptionList(*[self.anime(*entry.values()) for entry in animeList])
+        self.animeList = anime.copy()
+        yield OptionList(*self.get_list_as_tables())
 
     @on(Input.Changed)
     def show_new_list(self, event: Input.Changed) -> None:
-        anime = alist.new_list(event.value, animeList)
+        self.animeList = alist.new_list(event.value, anime)
+        oplist = self.query_one(OptionList)
+        oplist.clear_options()
+        oplist.add_options(self.get_list_as_tables())
 
     @on(OptionList.OptionSelected)
     def test(self) -> None:
         quit()
+
+class kizu(App):
+    CSS_PATH = "layout.css"
+
+    def compose(self) -> ComposeResult:
+        yield Header()
+        yield Footer()
+        yield ListUpdate()
 
 if __name__ == "__main__":
     app = kizu()
