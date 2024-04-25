@@ -16,15 +16,9 @@ def gen_list():
     shows=[]
 
     for line in content:
-        shows.append({
-            "ID" : "1337",
-            "Title" : line,
-            "EpCount" : "69",
-            "AirDate" : "11/09/2001"
-        })
-        #id = get_id(line)
-        #show_info = show.get_info(id)
-        #shows.append(show_info)
+        id = get_id(line)
+        show_info = show.get_info(id)
+        shows.append(show_info)
 
     return shows
 
