@@ -3,9 +3,15 @@ import alist
 from textual import on
 from rich.table import Table
 from textual.app import App, ComposeResult
+from textual.reactive import reactive
 from textual.widgets import Header, Footer, OptionList, Input
+from textual.widget import Widget
 
-animeList: list[list[str, str, str, str], ...] = alist.gen_list()
+anime = alist.gen_list()
+animeList: list[list[str, str, str, str], ...] = anime
+
+class ListUpdate(Widget):
+    test = reactive("test")
 
 class kizu(App):
     CSS_PATH = "layout.css"
@@ -24,6 +30,10 @@ class kizu(App):
         yield Footer()
         yield Input(placeholder="Anime Name / ID")
         yield OptionList(*[self.anime(*entry.values()) for entry in animeList])
+
+    @on(Input.Changed)
+    def show_new_list(self, event: Input.Changed) -> None:
+        anime = alist.new_list(event.value, animeList)
 
     @on(OptionList.OptionSelected)
     def test(self) -> None:
