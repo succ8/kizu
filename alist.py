@@ -1,6 +1,7 @@
 #!/bin/python
 import show
 import re
+from rapidfuzz import fuzz
 
 list_file="anime.list"
 
@@ -15,6 +16,24 @@ def gen_list():
     shows=[]
 
     for line in content:
-        shows.append(show.get_info(get_id(line)))
+        id = get_id(line)
+        show_info = show.get_info(id)
+        shows.append(show_info)
 
     return shows
+
+def filter(search, name):
+    ratio = fuzz.partial_ratio(search, name)
+    if (ratio > 85):
+        return 1
+    else:
+        return 0
+
+def new_list(search, shows):
+    newList = []
+
+    for listing in shows:
+        if (filter(search, listing.get("Title"))):
+            newList.append(listing)
+
+    return newList

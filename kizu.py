@@ -7,7 +7,6 @@ from textual.widgets import Header, Footer, OptionList, Input
 
 animeList: list[list[str, str, str, str], ...] = alist.gen_list()
 
-
 class kizu(App):
     CSS_PATH = "layout.css"
 
@@ -28,7 +27,7 @@ class kizu(App):
 
     @on(OptionList.OptionSelected)
     def test(self) -> None:
-        quit(OptionList.index)
+        quit()
 
 if __name__ == "__main__":
     app = kizu()
