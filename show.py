@@ -51,7 +51,7 @@ def get_info(id):
         "ID"      : str(resJson['ID']),
         "Title"   : resJson['Title'],
         "EpCount" : str(resJson['EpisodeCount']),
-        "AirDate"   : resJson['AirDate']
+        "AirDate" : resJson['AirDate']
     }
     return series_data
 

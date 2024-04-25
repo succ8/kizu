@@ -10,8 +10,8 @@ def get_id(line):
 
     return id
 
-def gen_list(filename):
-    content=open(filename)
+def gen_list():
+    content=open(list_file)
     shows=[]
 
     for line in content:
