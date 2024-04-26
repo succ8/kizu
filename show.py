@@ -13,11 +13,14 @@ def get_key():
         api_key = key_file.read().replace('\n','')
     return api_key
 
+# Gets information on episode from Shoko
 def get_episode(id):
+    # Gets json episode info from Shoko using episode ID
     req_url = shoko_url + "/api/v3/Episode/AniDB/" + str(id) + \
         "/Episode?includeFiles=true&includeMediaInfo=false&includeAbsolutePaths=false&includeDataFrom=Shoko"
     res_json = get_req(req_url)
 
+    # Creates dictionary from json episode data
     episode_data = {
         "AniDB"    : res_json["IDs"]["AniDB"],
         "ShokoID"  : res_json["IDs"]["ID"],
@@ -44,9 +47,11 @@ def get_req(req_url):
 
 # Get generic information about the series
 def get_info(id):
+    # Get json series info from Shoko using aniDB ID
     req_url = shoko_url + "/api/v3/Series/AniDB/" + str(id)
     res_json = get_req(req_url)
 
+    # Creates a dicitonary of series info from json
     series_data = {
         "ID"      : str(res_json['ID']),
         "Title"   : res_json['Title'],
@@ -57,12 +62,13 @@ def get_info(id):
 
 # Get information on episodes of a series
 def get_episodes(id):
+    # Gets json episode list from Shoko 
     req_url = shoko_url + "/api/v3/Series/AniDB/" + str(id) + \
         "/Episode?pageSize=0&page=1&includeMissing=false&includeHidden=false&includeWatched=true&fuzzy=true"
     res_json = get_req(req_url)
     episode_list = []
 
-    # Loop through each episode and get required data
+    # Convert json data to dictionary
     for episode in res_json["List"]:
         cur_episode = {
             "EpNumber" : str(episode["EpisodeNumber"]),
@@ -72,4 +78,5 @@ def get_episodes(id):
             "EpID"     : str(episode["ID"])
         }
         episode_list.append(cur_episode)
+    # Return list of dictionaries
     return episode_list
