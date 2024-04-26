@@ -32,10 +32,10 @@ def filter(search, name):
 def new_list(search, shows):
     if (len(search) == 0):
         return shows
-    newList = []
+    output_list = []
 
     for listing in shows:
         if (filter(search, listing.get("Title"))):
-            newList.append(listing)
+            output_list.append(listing)
 
-    return newList
+    return output_list

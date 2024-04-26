@@ -7,10 +7,10 @@ from textual.reactive import reactive
 from textual.widgets import Header, Footer, OptionList, Input
 from textual.widget import Widget
 
-anime = alist.gen_list()
+first_list = alist.gen_list()
 
 class ListUpdate(Widget):
-    animeList = reactive([])
+    anime_list = reactive([])
 
     @staticmethod
     def anime(id: str, name: str, eps: str, date: str) -> Table:
@@ -22,18 +22,18 @@ class ListUpdate(Widget):
         return table
 
     def get_list_as_tables(self):
-        return [self.anime(*entry.values()) for entry in self.animeList]
+        return [self.anime(*entry.values()) for entry in self.anime_list]
     
     #def on_mount(self):
 
     def compose(self) -> ComposeResult:
         yield Input(placeholder="Anime Name / ID")
-        self.animeList = anime.copy()
+        self.anime_list = first_list.copy()
         yield OptionList(*self.get_list_as_tables())
 
     @on(Input.Changed)
     def show_new_list(self, event: Input.Changed) -> None:
-        self.animeList = alist.new_list(event.value, anime)
+        self.anime_list = alist.new_list(event.value, first_list)
         oplist = self.query_one(OptionList)
         oplist.clear_options()
         oplist.add_options(self.get_list_as_tables())
